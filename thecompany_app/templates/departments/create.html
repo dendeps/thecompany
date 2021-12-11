@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Department{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form id="add-department" method="post">
+    <label for="title">Title</label>
+    <input name="department" id="department" value="{{ request.form['department'] }}" required>
+    <input type="submit" class="btn btn-primary" value="Save">
+  </form>
+{% endblock %}

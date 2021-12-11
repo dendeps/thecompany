@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from config import Config
 
-MIGRATIONS_DIR = os.path.join('department_app', 'migrations')
+MIGRATIONS_DIR = os.path.join('thecompany_app', 'migrations')
 TEMPLATES_DIR = 'templates'
 
 app = Flask(__name__, template_folder=TEMPLATES_DIR)

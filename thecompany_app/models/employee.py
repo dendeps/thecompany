@@ -22,9 +22,12 @@ class Employee(db.Model):
     #: department id of the department that employee works in
     department_id = db.Column(db.Integer, db.ForeignKey('department.id'))
 
-    def __init__(self, name, dob, salary=0, department=None):
+    def __init__(self, name, position, dob, salary=0, department=None):
         #: employee's name
         self.name = name
+
+        #: employee's position
+        self.position = position
 
         #: employee's date of birth
         self.dob = dob

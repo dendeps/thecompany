@@ -4,7 +4,7 @@ import os
 user = 'postgres' #os.environ.get('MYSQL_USER')
 password = 'kidagibu' #os.environ.get('MYSQL_PASSWORD')
 server = 'localhost:5432' #os.environ.get('MYSQL_SERVER')
-database = "trypg"  #os.environ.get('MYSQL_DATABASE')
+database = "thecompany"  #os.environ.get('MYSQL_DATABASE')
 
 
 class Config:

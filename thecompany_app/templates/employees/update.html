@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit Department{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form id="edit-department" method="post" action="{{ url_for('departments.update', id=department['id']) }}">
+    <label for="title">Title</label>
+    <input name="department" id="department" value="{{ request.form['department'] }}" required>
+    <input type="submit" class="btn btn-primary" value="Save">
+  </form>
+{% endblock %}
+
+

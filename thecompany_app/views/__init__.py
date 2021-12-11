@@ -9,5 +9,9 @@ def init_views():
     Register views
     :return: None
     """
-    employee_view.EmployeeView.register(app)
-    department_view.DepartmentView.register(app)
+
+    from . import department_view
+    app.register_blueprint(department_view.bp)
+
+    from . import employee_view
+    app.register_blueprint(employee_view.bp)

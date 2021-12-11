@@ -3,22 +3,16 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 
+from thecompany_app.service.dbservice import DBService
+
 bp = Blueprint('departments', __name__)
 
 
 @bp.route('/departments')
 def index():
-    db = get_db()
-    departments = db.execute(
-        'SELECT p.id, department'
-        ' FROM department p '
-        ' ORDER BY department DESC'
-    ).fetchall()
-    return render_template('departments/index.html', departments=departments)
-
+    return render_template('departments/index.html', departments=DBService.get_departments())
 
 @bp.route('/department', methods=('GET', 'POST'))
-@login_required
 def create():
     if request.method == 'POST':
         department = request.form['department']
@@ -28,69 +22,29 @@ def create():
             error = 'Department is required.'
 
         if error is None:
-            try:
-                db = get_db()
-                db.execute(
-                    'INSERT INTO department (department)'
-                    ' VALUES (?)',
-                    (department,)
-                )
-                db.commit()
-            except db.IntegrityError:
-                error = f"Department {department} already exists."
-            else:
-                return redirect(url_for('departments.index'))
+            DBService.add_department(department)
+            return redirect(url_for('departments.index'))
         flash(error)
 
     return render_template('departments/create.html')
 
 
-def get_dept(id):
-    dept = get_db().execute(
-        'SELECT p.id, department'
-        ' FROM department d JOIN user u ON d.department = u.department'
-        ' WHERE d.id = ?',
-        (id,)
-    ).fetchone()
-
-    if dept is None:
-        abort(404, f"Department id {id} doesn't exist.")
-
-    return dept
-
-
-@bp.route('/departments/<int:id>/update', methods=('GET', 'POST'))
-@login_required
+@bp.route('/departments/update/<int:id>', methods=('GET', 'POST'))
 def update(id):
-    dept = get_dept(id)
-
+    department = DBService.get_department(id)
     if request.method == 'POST':
-        title = request.form['title']
+        dept = request.form['department']
         error = None
-
-        if not title:
-            error = 'Title is required.'
-
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                'UPDATE department SET title = ?'
-                ' WHERE id = ?',
-                (title, id)
-            )
-            db.commit()
-            return redirect(url_for('blog.index'))
-
-    return render_template('blog/update.html', dept=dept)
-
+        if not dept:
+            error = 'Department is required.'
+        if error is None:
+            DBService.update_department(id, dept)
+            return redirect(url_for('departments.index'))
+        flash(error)
+    return render_template('departments/update.html', department=department)
 
 @bp.route('/departments/delete/<int:id>', methods=('POST',))
-@login_required
 def delete(id):
-    get_dept(id)
-    db = get_db()
-    db.execute('DELETE FROM department WHERE id = ?', (id,))
-    db.commit()
-    return redirect(url_for('department.index'))
+    DBService.delete_department(id)
+    return redirect(url_for('departments.index'))
+
