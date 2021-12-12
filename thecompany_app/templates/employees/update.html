@@ -1,14 +1,23 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Edit Department{% endblock %}</h1>
+  <h1>{% block title %}Edit Employee{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-  <form id="edit-department" method="post" action="{{ url_for('departments.update', id=department['id']) }}">
-    <label for="title">Title</label>
-    <input name="department" id="department" value="{{ request.form['department'] }}" required>
-    <input type="submit" class="btn btn-primary" value="Save">
+  <form id="edit-employee" method="post" action="{{ url_for('employees.update', uuid=employee['uuid']) }}">
+      {{form.hidden_tag()}}
+      <label for="fullname" class="form-label">Full name</label>
+      <input name="fullname" id="fullname" class="form-control" required>
+      <label for="department" class="form-label">Department</label>
+      <input name="department"  type="text" class="form-control" id="department" aria-describedby="department">
+      <label for="position" class="form-label">Position</label>
+      <input name="position"  type="text" class="form-control" id="position" aria-describedby="position">
+      <label for="dob" class="form-label">Date ob birth</label>
+      <input name="dob"  type="text" class="form-control" id="dob" aria-describedby="dob">
+      <label for="salary" class="form-label">Salary</label>
+      <input name="salary"  type="text" class="form-control" id="salary" aria-describedby="salary">
+      <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 {% endblock %}
 

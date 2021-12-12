@@ -55,22 +55,38 @@ def create():
     return render_template('employees/create.html', form=form)
 
 
-@bp.route('/departments/update/<int:id>', methods=('GET', 'POST'))
-def update(id):
-    department = DBService.get_department(id)
+@bp.route('/employees/update/<uuid>', methods=('GET', 'POST'))
+def update(uuid):
+    employee = DBService.get_employee(uuid)
+    form = EmployeeForm()
     if request.method == 'POST':
-        dept = request.form['department']
         error = None
-        if not dept:
-            error = 'Department is required.'
+
+        form.fullname = request.form['fullname']
+        form.department = request.form['department']
+        form.position = request.form['position']
+        form.dob = request.form['dob']
+        form.salary = request.form['salary']
+
+        if form.validate_on_submit():
+            name = request.form['fullname']
+            department = request.form['department']
+            position = request.form['position']
+            dob = request.form['dob']
+            salary = request.form['salary']
+        else:
+            error = form.errors
+            for err in error:
+                flash(err)
+
         if error is None:
-            DBService.update_department(id, dept)
-            return redirect(url_for('departments.index'))
+            DBService.update_employee(uuid, name, position, dob, salary, department)
+            return redirect(url_for('employees.index'))
         flash(error)
-    return render_template('departments/update.html', department=department)
+    return render_template('employees/update.html', employee=employee, form=form)
 
 
-@bp.route('/departments/delete/<int:id>', methods=('POST',))
-def delete(id):
-    DBService.delete_department(id)
-    return redirect(url_for('departments.index'))
+@bp.route('/employees/delete/<uuid>', methods=('POST',))
+def delete(uuid):
+    DBService.delete_employee(uuid)
+    return redirect(url_for('employees.index'))

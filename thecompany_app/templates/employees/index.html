@@ -28,9 +28,9 @@
                     <td>{{ employee['department'] }}</td>
                     <td>{{ employee['dob'] }}</td>
                     <td>{{ employee['salary'] }}</td>
-                    <td><a class="btn btn-outline-primary" href="{{ url_for('employees.update', id=employee['id']) }}">Edit</a></td>
+                    <td><a class="btn btn-outline-primary" href="{{ url_for('employees.update', uuid=employee['uuid']) }}">Edit</a></td>
                     <td>
-                        <form action="{{ url_for('employees.delete', id=employee['id']) }}" method=post>
+                        <form action="{{ url_for('employees.delete', uuid=employee['uuid']) }}" method=post>
                             <input type=submit class="btn btn-outline-danger" value=Delete>
                         </form>
                     </td>

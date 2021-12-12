@@ -26,9 +26,9 @@
                     <td><button class="btn btn-outline-primary">View</button></td>
                     <td>empl</td>
                     <td>avg</td>
-                    <td><a class="btn btn-outline-primary" href="{{ url_for('departments.update', id=department['id']) }}">Edit</a></td>
+                    <td><a class="btn btn-outline-primary" href="{{ url_for('departments.update', uuid=department['uuid']) }}">Edit</a></td>
                     <td>
-                        <form action="{{ url_for('departments.delete', id=department['id']) }}" method=post>
+                        <form action="{{ url_for('departments.delete', uuid=department['uuid']) }}" method=post>
                             <input type=submit class="btn btn-outline-danger" value=Delete>
                         </form>
                     </td>

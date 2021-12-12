@@ -8,7 +8,7 @@ from thecompany_app.service.dbservice import DBService
 bp = Blueprint('departments', __name__)
 
 
-@bp.route('/departments')
+@bp.route('/departments', methods=('GET',))
 def index():
     return render_template('departments/index.html', departments=DBService.get_departments())
 
@@ -29,22 +29,22 @@ def create():
     return render_template('departments/create.html')
 
 
-@bp.route('/departments/update/<int:id>', methods=('GET', 'POST'))
-def update(id):
-    department = DBService.get_department(id)
+@bp.route('/departments/update/<uuid>', methods=('GET', 'POST'))
+def update(uuid):
+    department = DBService.get_department(uuid)
     if request.method == 'POST':
         dept = request.form['department']
         error = None
         if not dept:
             error = 'Department is required.'
         if error is None:
-            DBService.update_department(id, dept)
+            DBService.update_department(uuid, dept)
             return redirect(url_for('departments.index'))
         flash(error)
     return render_template('departments/update.html', department=department)
 
-@bp.route('/departments/delete/<int:id>', methods=('POST',))
-def delete(id):
-    DBService.delete_department(id)
+@bp.route('/departments/delete/<uuid>', methods=('POST',))
+def delete(uuid):
+    DBService.delete_department(uuid)
     return redirect(url_for('departments.index'))
 

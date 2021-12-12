@@ -1,3 +1,5 @@
+import uuid
+
 from thecompany_app import db
 
 
@@ -6,6 +8,9 @@ class Employee(db.Model):
 
     # id of the employee in the table
     id = db.Column(db.Integer, primary_key=True)
+
+    #: UUID of the department
+    uuid = db.Column(db.String(36), unique=True)
 
     # Name of the Employee
     name = db.Column(db.String(), nullable=False)
@@ -35,8 +40,10 @@ class Employee(db.Model):
         #: employee's salary
         self.salary = salary
 
-        #: department employee works in
+        #: department where employee works in
         self.department = department
+
+        self.uuid = str(uuid.uuid4())
 
     def __repr__(self):
         return f'Employee({self.name}, {self.date_of_birth}, {self.salary})'
