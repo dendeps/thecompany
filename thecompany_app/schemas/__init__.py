@@ -1,2 +1,2 @@
-from . import department
-from . import employee
+from . import schema_department
+from . import schema_employee

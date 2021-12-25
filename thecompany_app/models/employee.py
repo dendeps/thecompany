@@ -1,5 +1,4 @@
 import uuid
-
 from thecompany_app import db
 
 
@@ -46,4 +45,32 @@ class Employee(db.Model):
         self.uuid = str(uuid.uuid4())
 
     def __repr__(self):
-        return f'Employee({self.name}, {self.date_of_birth}, {self.salary})'
+        return f'Employee({self.name}, {self.date_of_birth}, {self.department}, {self.position}, {self.salary})'
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
+
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    @classmethod
+    def get_all(cls):
+        return db.session.query(Employee).all()
+
+    @classmethod
+    def get_employee(cls, uuid):
+        employee = db.session.query(Employee).filter_by(uuid=uuid).first()
+        if employee is None:
+            raise ValueError('Invalid department uuid')
+        return employee
+
+    @classmethod
+    def delete_employee(cls, uuid):
+        employee = cls.get_employee(uuid)
+        if employee is None:
+            raise ValueError('Invalid employee uuid')
+        db.session.delete(employee)
+        db.session.commit()

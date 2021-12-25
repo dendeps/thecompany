@@ -4,8 +4,8 @@ from flask import (
 from flask_wtf import FlaskForm
 from wtforms import StringField, DecimalField
 from wtforms.validators import InputRequired, Length, ValidationError
-
-from thecompany_app.service.dbservice import DBService
+from thecompany_app.models.employee import Employee
+from thecompany_app.schemas.schema_employee import Employee_schema
 
 
 class EmployeeForm(FlaskForm):
@@ -17,11 +17,12 @@ class EmployeeForm(FlaskForm):
 
 
 bp = Blueprint('employees', __name__)
+schema = Employee_schema()
 
 
 @bp.route('/employees')
 def index():
-    return render_template('employees/index.html', employees=DBService.get_employees())
+    return render_template('employees/index.html', employees=Employee.get_all())
 
 
 @bp.route('/employee', methods=('GET', 'POST'))
@@ -47,17 +48,25 @@ def create():
             for err in error:
                 flash(err)
 
+        try:
+            employee = schema.load({'name': name,
+                                    'department': department,
+                                    'position': position,
+                                    'dob': dob,
+                                    'salary': salary
+                                    })
+        except ValidationError as err:
+            error = err.messages
         if error is None:
-            DBService.add_employee(name, position, dob, salary, department)
+            employee.save_to_db()
             return redirect(url_for('employees.index'))
         flash(error)
-
     return render_template('employees/create.html', form=form)
 
 
 @bp.route('/employees/update/<uuid>', methods=('GET', 'POST'))
 def update(uuid):
-    employee = DBService.get_employee(uuid)
+    employee = Employee.get_employee(uuid)
     form = EmployeeForm()
     if request.method == 'POST':
         error = None
@@ -80,7 +89,12 @@ def update(uuid):
                 flash(err)
 
         if error is None:
-            DBService.update_employee(uuid, name, position, dob, salary, department)
+            employee.name = name
+            employee.position = position
+            employee.dob = dob
+            employee.salary = salary
+            employee.department = department
+            employee.save_to_db()
             return redirect(url_for('employees.index'))
         flash(error)
     return render_template('employees/update.html', employee=employee, form=form)
@@ -88,5 +102,6 @@ def update(uuid):
 
 @bp.route('/employees/delete/<uuid>', methods=('POST',))
 def delete(uuid):
-    DBService.delete_employee(uuid)
+    employee = Employee.get_employee(uuid)
+    employee.delete_from_db()
     return redirect(url_for('employees.index'))

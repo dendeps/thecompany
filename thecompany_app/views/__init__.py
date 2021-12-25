@@ -1,5 +1,4 @@
 from thecompany_app import app
-
 from . import employee_view
 from . import department_view
 

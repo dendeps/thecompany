@@ -31,3 +31,7 @@ typing_extensions==4.0.0
 Werkzeug==2.0.2
 wrapt==1.13.3
 zipp==3.6.0
+
+WTForms~=3.0.0
+uuid~=1.30
+marshmallow~=3.14.1

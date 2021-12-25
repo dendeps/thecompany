@@ -6,8 +6,8 @@
 
 {% block content %}
   <form id="edit-department" method="post" action="{{ url_for('departments.update', uuid=department['uuid']) }}">
-    <label for="title">Title</label>
-    <input name="department" id="department" value="{{ request.form['department'] }}" required>
+    <label>Title</label>
+    <input name="department" id="department" value= "{{ department.name }}" required>
     <input type="submit" class="btn btn-primary" value="Save">
   </form>
 {% endblock %}
