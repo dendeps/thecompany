@@ -24,8 +24,8 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ department['name'] }}</td>
                     <td><button class="btn btn-outline-primary">View</button></td>
-                    <td>empl</td>
-                    <td>avg</td>
+                    <td>{{ department.number_of_employees }}</td>
+                    <td>{{ department.average_salary }}</td>
                     <td><a class="btn btn-outline-primary" href="{{ url_for('departments.update', uuid=department['uuid']) }}">Edit</a></td>
                     <td>
                         <form action="{{ url_for('departments.delete', uuid=department['uuid']) }}" method=post>

@@ -16,7 +16,6 @@ schema = Department_schema()
 def index():
     return render_template('departments/index.html', departments=Department.get_all())
 
-
 @bp.route('/department', methods=('GET', 'POST'))
 def create():
     if request.method == 'POST':

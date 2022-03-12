@@ -5,6 +5,7 @@ from flask import request
 from flask_restful import Resource
 from marshmallow import ValidationError
 
+from thecompany_app.models.department import Department
 from thecompany_app.models.employee import Employee
 from thecompany_app.schemas.schema_employee import Employee_schema
 
@@ -47,19 +48,20 @@ class Employee_api(Employee_api_base):
         return self.schema.dump(employee), 201
 
     def put(self, uuid):
-        error = self.schema.validate(request.json)
-        if error:
-            return error, 400
         try:
             employee = Employee.get_employee(uuid)
         except ValueError:
             return self.NOT_FOUND_MSG, 404
+        try:
+            upd_employee = self.schema.load(request.json)
+        except ValidationError as error:
+            return error.messages, 400
         else:
-            employee.name = request.json.get("name")
-            employee.position = request.json.get("position")
-            employee.salary = request.json.get("salary")
-            employee.dob = request.json.get("dob")
-            employee.department = request.json.get("department")
+            employee.name = upd_employee.name
+            employee.position = upd_employee.position
+            employee.salary = upd_employee.salary
+            employee.dob = upd_employee.dob
+            employee.department_id = upd_employee.department_id
             employee.save_to_db()
             return self.schema.dump(employee), 200
 

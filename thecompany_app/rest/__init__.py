@@ -6,6 +6,7 @@ from .api_employee import Employee_list_api, Employee_api
 
 
 def init_api():
+    pass
     api.add_resource(Department_list_api, '/api/departments')
     api.add_resource(Department_api, '/api/department/<uuid>', '/api/department')
 

@@ -26,7 +26,7 @@ class Employee(db.Model):
     #: department id of the department that employee works in
     department_id = db.Column(db.Integer, db.ForeignKey('department.id'))
 
-    def __init__(self, name, position, dob, salary=0, department=None):
+    def __init__(self, name, position, dob, salary=0, department_id=None):
         #: employee's name
         self.name = name
 
@@ -40,12 +40,12 @@ class Employee(db.Model):
         self.salary = salary
 
         #: department where employee works in
-        self.department = department
+        self.department_id = department_id
 
         self.uuid = str(uuid.uuid4())
 
     def __repr__(self):
-        return f'Employee({self.name}, {self.date_of_birth}, {self.department}, {self.position}, {self.salary})'
+        return f'Employee: {self.name}, {self.date_of_birth}, {self.position}, {self.salary}'
 
     def save_to_db(self):
         db.session.add(self)
@@ -64,7 +64,7 @@ class Employee(db.Model):
     def get_employee(cls, uuid):
         employee = db.session.query(Employee).filter_by(uuid=uuid).first()
         if employee is None:
-            raise ValueError('Invalid department uuid')
+            raise ValueError('Invalid employee uuid')
         return employee
 
     @classmethod

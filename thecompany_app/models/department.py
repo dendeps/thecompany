@@ -1,6 +1,7 @@
 from thecompany_app import db
 import uuid
 
+
 class Department(db.Model):
     __tablename__ = 'department'
 
@@ -13,12 +14,25 @@ class Department(db.Model):
     # Name of the department
     name = db.Column(db.String())
 
-    def __init__(self, name):
+    # Employees in this department
+    employees = db.relationship(
+        'Employee',
+        cascade="all,delete",
+        backref=db.backref('department',
+                           lazy=True)
+    )
+
+    def __init__(self, name, employees=None):
         self.name = name
         self.uuid = str(uuid.uuid4())
 
+        if employees is None:
+            employees = []
+            #: Employees working in the department
+        self.employees = employees
+
     def __repr__(self):
-        return f"Department: {self.name}, uuid: {self.uuid}"
+        return f"Department: {self.name}"
 
     def check_if_exists(self):
         department = db.session.query(Department).filter_by(name=self.name).first()
@@ -41,12 +55,14 @@ class Department(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-
-
-
     @classmethod
     def get_all(cls):
-        return db.session.query(Department).all()
+        departments = db.session.query(Department).all()
+        for dept in departments:
+            salary = dept.get_average_salary()
+            dept.average_salary = float(salary) if salary else 0
+            dept.number_of_employees = dept.get_number_of_employees()
+        return departments
 
     @classmethod
     def get_department(cls, uuid):
@@ -62,3 +78,33 @@ class Department(db.Model):
             raise ValueError('Invalid department uuid')
         db.session.delete(department)
         db.session.commit()
+
+    def get_average_salary(self):
+        avg_salary = 0
+        if self.employees:
+            for empl in self.employees:
+                avg_salary += empl.salary
+            avg_salary /= len(self.employees)
+        return round(avg_salary, 2)
+
+    def get_number_of_employees(self):
+        num_employees = len(self.employees)
+        return num_employees
+
+    """    
+    def get_average_salary(department_uuid):
+        return db.session.query(func.avg(Employee.salary)).filter_by(
+            department_uuid=department_uuid).scalar()
+    """
+
+    @staticmethod
+    def to_dict(uuid):
+        dept = Department.get_department(uuid)
+        return {
+            'uuid': dept.id,
+            'name': dept.name,
+            'employees_count': len(dept.employees),
+            'average_salary': dept.get_average_salary(dept),
+            'employees': [dept.to_dict(employee.id)
+                          for employee in dept.employees]
+        }
