@@ -39,6 +39,8 @@ jobs:
           command: 
             export PYTHONPATH=$PWD
             pytest
+            coverage run -m unittest discover
+            coverage report
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
