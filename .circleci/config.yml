@@ -39,7 +39,7 @@ jobs:
           command: 
             export PYTHONPATH=$PWD
             pytest
-            coverage run -m unittest discover
+            coverage run
             coverage report
 
 # Invoke jobs via workflows
