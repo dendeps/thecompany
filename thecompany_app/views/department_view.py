@@ -37,7 +37,7 @@ def create():
 
 @bp.route('/departments/update/<uuid>', methods=('GET', 'POST'))
 def update(uuid):
-    department = Department.get_department(uuid)
+    department = Department.get_by_uuid(uuid)
     if request.method == 'POST':
         dept_name = request.form['department']
         error = None
@@ -54,7 +54,7 @@ def update(uuid):
 def delete(uuid):
     error = None
     try:
-        department = Department.get_department(uuid)
+        department = Department.get_by_uuid(uuid)
     except ValueError:
         error = "No department found with provided UUID"
     if error is None:

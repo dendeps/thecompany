@@ -65,15 +65,15 @@ class Department(db.Model):
         return departments
 
     @classmethod
-    def get_department(cls, uuid):
+    def get_by_uuid(cls, uuid):
         department = db.session.query(Department).filter_by(uuid=uuid).first()
         if department is None:
             raise ValueError('Invalid department uuid')
         return department
 
     @classmethod
-    def delete_department(cls, uuid):
-        department = cls.get_department(uuid)
+    def delete_by_uuid(cls, uuid):
+        department = cls.get_by_uuid(uuid)
         if department is None:
             raise ValueError('Invalid department uuid')
         db.session.delete(department)
@@ -91,15 +91,9 @@ class Department(db.Model):
         num_employees = len(self.employees)
         return num_employees
 
-    """    
-    def get_average_salary(department_uuid):
-        return db.session.query(func.avg(Employee.salary)).filter_by(
-            department_uuid=department_uuid).scalar()
-    """
-
     @staticmethod
     def to_dict(uuid):
-        dept = Department.get_department(uuid)
+        dept = Department.get_by_uuid(uuid)
         return {
             'uuid': dept.id,
             'name': dept.name,

@@ -18,9 +18,11 @@ class Config(object):
                               f'@{server}/{database}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    #"postgresql://postgres:kidagibu@localhost:5432/trypg"
+    # "postgresql://postgres:kidagibu@localhost:5432/trypg"
+
 
 class TestingConfig(object):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'department_app', 'tests', 'test.db')
+    CSRF_ENABLED = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'thecompany_app', 'tests', 'test.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False

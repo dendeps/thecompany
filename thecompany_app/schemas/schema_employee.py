@@ -14,7 +14,7 @@ class DepartmentNested(fields.Nested):
     def _deserialize(self, value, attr, data, partial=None, **kwargs):
         try:
             dept_uuid = data['department']['uuid']
-            return Department.get_department(dept_uuid)
+            return Department.get_by_uuid(dept_uuid)
         except KeyError as error:
             raise ValidationError(
                 'Invalid or missing Department uuid'

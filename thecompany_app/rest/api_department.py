@@ -31,7 +31,7 @@ class Department_api(Department_api_base):
 
     def get(self, uuid:str):
         try:
-            department = Department.get_department(uuid)
+            department = Department.get_by_uuid(uuid)
         except ValueError:
             return self.NOT_FOUND_MSG, 404
         return self.schema.dump(department), 200
@@ -53,7 +53,7 @@ class Department_api(Department_api_base):
         if error:
             return error, 400
         try:
-            department = Department.get_department(uuid)
+            department = Department.get_by_uuid(uuid)
         except ValueError:
             return self.NOT_FOUND_MSG, 404
         else:
@@ -63,7 +63,7 @@ class Department_api(Department_api_base):
 
     def delete(self, uuid):
         try:
-            department = Department.get_department(uuid)
+            department = Department.get_by_uuid(uuid)
         except ValueError:
             return self.NOT_FOUND_MSG, 404
         department.delete_from_db()
