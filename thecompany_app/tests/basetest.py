@@ -5,6 +5,8 @@ import unittest
 
 from config import TestingConfig
 from thecompany_app import app, db
+from thecompany_app.models.populate import Populate
+
 
 
 class BaseTestCase(unittest.TestCase):
@@ -22,8 +24,10 @@ class BaseTestCase(unittest.TestCase):
         #self.app_context.push()
         #db.create_all()
 
-        self.app = app.test_client()
+        self.app = app
+        self.app.config.from_object(TestingConfig)
         db.create_all()
+        Populate.populate()
 
     def tearDown(self):
         """

@@ -56,7 +56,7 @@ def create():
             data = {
                 'name': form.name.data,
                 'position': form.position.data,
-                'department': dep.id,
+                'department': dep.name,
                 'dob': form.dob.data,
                 'salary': form.salary.data
             }

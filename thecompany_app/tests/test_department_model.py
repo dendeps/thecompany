@@ -34,9 +34,6 @@ class TestDepartmentModel(BaseTestCase):
         self.assertIsNone(Department.find_by_name("DeleteMe"))
 
     def test_get_all(self):
-        Department("DeptOne").save_to_db()
-        Department("DeptTwo").save_to_db()
-        Department("DeptThree").save_to_db()
         depts = Department.get_all()
         self.assertEqual(3, len(depts))
 
