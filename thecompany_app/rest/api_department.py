@@ -43,11 +43,8 @@ class Department_api(Department_api_base):
         except ValidationError as error:
             return error.messages, 400
         else:
-            if department.check_if_exists():
-                return self.ALREADY_EXISTS_MSG, 400
-            else:
-                department.save_to_db()
-                return self.schema.dump(department), 201
+            department.save_to_db()
+            return self.schema.dump(department), 201
 
     def put(self, uuid=None):
         if uuid is None:
