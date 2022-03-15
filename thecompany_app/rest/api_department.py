@@ -28,6 +28,7 @@ class Department_api(Department_api_base):
     NOT_FOUND_MSG = "No department found with provided UUID"
     SUCCESS_MSG = "Operation successful"
     ALREADY_EXISTS_MSG = "Department with this name already exists"
+    UUID_REQUIRED = "UUID is required"
 
     def get(self, uuid:str):
         try:
@@ -48,7 +49,9 @@ class Department_api(Department_api_base):
                 department.save_to_db()
                 return self.schema.dump(department), 201
 
-    def put(self, uuid):
+    def put(self, uuid=None):
+        if uuid is None:
+            return self.UUID_REQUIRED, 400
         error = self.schema.validate(request.json)
         if error:
             return error, 400
@@ -61,7 +64,9 @@ class Department_api(Department_api_base):
             department.save_to_db()
             return self.schema.dump(department), 200
 
-    def delete(self, uuid):
+    def delete(self, uuid=None):
+        if uuid is None:
+            return self.UUID_REQUIRED, 400
         try:
             department = Department.get_by_uuid(uuid)
         except ValueError:

@@ -40,7 +40,7 @@ def update(uuid):
     department = Department.get_by_uuid(uuid)
     if request.method == 'POST':
         dept_name = request.form['department']
-        error = None
+        error = schema.validate(dept_name)
         if not dept_name:
             error = 'Department is required.'
         if error is None:

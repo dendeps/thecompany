@@ -1,4 +1,7 @@
+import bdb
+
 from thecompany_app.models.department import Department
+from thecompany_app.models.employee import Employee
 from thecompany_app.tests.basetest import BaseTestCase
 
 
@@ -17,12 +20,18 @@ class TestDepartmentModel(BaseTestCase):
         self.assertEqual(repr(dept), "Department: "+deptName)
 
     def test_check_if_exists(self):
+        """
+        Tests checking if dept already exists
+        """
         dept = Department("TestDepartmentName")
         self.assertFalse(dept.check_if_exists())
         dept.save_to_db()
         self.assertTrue(dept.check_if_exists())
 
     def test_find_by_name(self):
+        """
+        Tests checking if dept already exists
+        """
         dept = Department("FindMe")
         dept.save_to_db()
         self.assertEqual(dept, Department.find_by_name("FindMe"))
@@ -50,6 +59,18 @@ class TestDepartmentModel(BaseTestCase):
         dept.save_to_db()
         Department.delete_by_uuid(dept.uuid)
         self.assertIsNone(Department.find_by_name("DeleteMe"))
+
+    def test_get_avg_salary(self):
+        Department('GosDep').save_to_db()
+        department = Department.find_by_name("GosDep")
+        employee_1 = Employee("Steve J", "Manager", "01-01-1990", 8000, department.id)
+        employee_2 = Employee("Bill Gates", "Java Dev", "02-02-1992", 3000, department.id)
+        employee_1.save_to_db()
+        employee_2.save_to_db()
+        department.employees = [employee_1, employee_2]
+        self.assertEqual(department.get_average_salary(), (employee_1.salary + employee_2.salary)/2)
+
+
 
 
 
