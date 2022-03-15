@@ -40,7 +40,7 @@ jobs:
             export PYTHONPATH=$PWD
             export COVERALLS_REPO_TOKEN="n83cQ9h6vTuud5UrjwMRJY09f2B89LydI"
             . venv/bin/activate
-            pytest ~/project/thecompany_app/tests
+            pytest ~/thecompany/thecompany_app/tests
             coverage run
             coveralls
 
