@@ -6,7 +6,6 @@ from thecompany_app.models.department import Department
 from thecompany_app.tests.basetest import BaseTestCase
 
 
-
 class TestDepartmentAPI(BaseTestCase):
     """
     Department API test cases
@@ -27,7 +26,7 @@ class TestDepartmentAPI(BaseTestCase):
         client = app.test_client()
         dept = Department("TestDepartment")
         dept.save_to_db()
-        response = client.get('/api/department/'+dept.uuid)
+        response = client.get('/api/department/' + dept.uuid)
         assert response.status_code == http.HTTPStatus.OK
         self.assertEqual(response.json.get("uuid"), dept.uuid)
         self.assertEqual(response.json.get("name"), dept.name)
@@ -35,19 +34,18 @@ class TestDepartmentAPI(BaseTestCase):
         response = client.get('/api/department/wronguuid')
         self.assertEqual(response.status_code, 404)
 
-
     def test_post(self):
         client = app.test_client()
         with client:
             response = client.post('/api/department')
             self.assertEqual(response.status_code, 400)
             response = client.post('/api/department', data=json.dumps(dict(name='TestDep')),
-                       content_type='application/json')
+                                   content_type='application/json')
             departments = json.loads(response.data)
             self.assertEqual(departments.get("name"), 'TestDep')
             response = client.post('/api/department', data=json.dumps(dict(name='TestDep')),
                                    content_type='application/json')
-            self.assertEqual(json.loads(response.data), 'Department with this name already exists')
+            self.assertTrue(str(json.loads(response.data)).find('Department with this name already exists'))
             response = client.post('/api/department', data=json.dumps(dict(name='01')),
                                    content_type='application/json')
             self.assertTrue(str(json.loads(response.data)).find("Shorter than minimum length 3"))
@@ -59,12 +57,12 @@ class TestDepartmentAPI(BaseTestCase):
             self.assertEqual(response.status_code, 400)
 
             response = client.put('/api/department/blabla', data=json.dumps(dict(name='TestDep')),
-                                   content_type='application/json')
+                                  content_type='application/json')
             self.assertEqual(response.status_code, 404)
 
             dept = Department.get_all()[0]
-            response = client.put('/api/department/'+dept.uuid, data=json.dumps(dict(name='NewName')),
-                                   content_type='application/json')
+            response = client.put('/api/department/' + dept.uuid, data=json.dumps(dict(name='NewName')),
+                                  content_type='application/json')
             self.assertEqual(response.status_code, 200)
 
             response = client.put('/api/department/' + dept.uuid, data=json.dumps(dict(name='01')),
@@ -82,15 +80,10 @@ class TestDepartmentAPI(BaseTestCase):
             self.assertEqual(response.status_code, 400)
 
             response = client.delete('/api/department/blabla', data=json.dumps(dict(name='TestDep')),
-                                   content_type='application/json')
+                                     content_type='application/json')
             self.assertEqual(response.status_code, 404)
 
             dept = Department.get_all()[0]
-            response = client.delete('/api/department/'+dept.uuid, data=json.dumps(dict(name='NewName')),
-                                   content_type='application/json')
+            response = client.delete('/api/department/' + dept.uuid, data=json.dumps(dict(name='NewName')),
+                                     content_type='application/json')
             self.assertEqual(204, response.status_code)
-
-
-
-
-
