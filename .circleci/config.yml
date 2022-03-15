@@ -40,8 +40,7 @@ jobs:
             export PYTHONPATH=$PWD
             export COVERALLS_REPO_TOKEN="n83cQ9h6vTuud5UrjwMRJY09f2B89LydI"
             pytest
-            coverage run
-            coverage report
+            coverage run --source='.' -m unittest
             coveralls
 
 # Invoke jobs via workflows
