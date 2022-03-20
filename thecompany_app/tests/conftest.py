@@ -8,8 +8,7 @@ from thecompany_app import app, db
 from thecompany_app.models.populate import Populate
 
 
-
-class BaseTestCase(unittest.TestCase):
+class Conftest(unittest.TestCase):
     """
     Base test case class
     """

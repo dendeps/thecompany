@@ -31,7 +31,7 @@ class Employee_api(Employee_api_base):
 
     def get(self, uuid:str):
         try:
-            employee = Employee.get_employee(uuid)
+            employee = Employee.get_by_uuid(uuid)
         except ValueError:
             return self.NOT_FOUND_MSG, 404
         return self.schema.dump(employee), 200
@@ -49,7 +49,7 @@ class Employee_api(Employee_api_base):
 
     def put(self, uuid):
         try:
-            employee = Employee.get_employee(uuid)
+            employee = Employee.get_by_uuid(uuid)
         except ValueError:
             return self.NOT_FOUND_MSG, 404
         try:
@@ -67,7 +67,7 @@ class Employee_api(Employee_api_base):
 
     def delete(self, uuid):
         try:
-            employee = Employee.get_employee(uuid)
+            employee = Employee.get_by_uuid(uuid)
         except ValueError:
             return self.NOT_FOUND_MSG, 404
         employee.delete_from_db()

@@ -3,10 +3,10 @@ import json
 
 from thecompany_app import app
 from thecompany_app.models.department import Department
-from thecompany_app.tests.basetest import BaseTestCase
+from thecompany_app.tests.conftest import Conftest
 
 
-class TestDepartmentAPI(BaseTestCase):
+class TestDepartmentAPI(Conftest):
     """
     Department API test cases
     """

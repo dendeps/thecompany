@@ -74,7 +74,7 @@ def create():
 
 @bp.route('/employees/update/<uuid>', methods=('GET', 'POST'))
 def update(uuid):
-    employee = Employee.get_employee(uuid)
+    employee = Employee.get_by_uuid(uuid)
     EmployeeForm.get_departments_list()
     form = EmployeeForm(obj=employee)
 
@@ -110,6 +110,6 @@ def update(uuid):
 
 @bp.route('/employees/delete/<uuid>', methods=('POST',))
 def delete(uuid):
-    employee = Employee.get_employee(uuid)
+    employee = Employee.get_by_uuid(uuid)
     employee.delete_from_db()
     return redirect(url_for('employees.index'))

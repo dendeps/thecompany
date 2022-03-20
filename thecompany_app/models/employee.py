@@ -45,7 +45,7 @@ class Employee(db.Model):
         self.uuid = str(uuid.uuid4())
 
     def __repr__(self):
-        return f'Employee: {self.name}, {self.date_of_birth}, {self.position}, {self.salary}'
+        return f'Employee: {self.name}, {self.dob}, {self.position}, {self.salary}'
 
     def save_to_db(self):
         db.session.add(self)
@@ -61,15 +61,15 @@ class Employee(db.Model):
         return db.session.query(Employee).all()
 
     @classmethod
-    def get_employee(cls, uuid):
+    def get_by_uuid(cls, uuid):
         employee = db.session.query(Employee).filter_by(uuid=uuid).first()
         if employee is None:
             raise ValueError('Invalid employee uuid')
         return employee
 
     @classmethod
-    def delete_employee(cls, uuid):
-        employee = cls.get_employee(uuid)
+    def delete_by_uuid(cls, uuid):
+        employee = cls.get_by_uuid(uuid)
         if employee is None:
             raise ValueError('Invalid employee uuid')
         db.session.delete(employee)

@@ -2,10 +2,10 @@ import bdb
 
 from thecompany_app.models.department import Department
 from thecompany_app.models.employee import Employee
-from thecompany_app.tests.basetest import BaseTestCase
+from thecompany_app.tests.conftest import Conftest
 
 
-class TestDepartmentModel(BaseTestCase):
+class TestDepartmentModel(Conftest):
     """
     Department model test case
     """
