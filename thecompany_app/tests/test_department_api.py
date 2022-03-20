@@ -45,7 +45,8 @@ class TestDepartmentAPI(Conftest):
             self.assertEqual(departments.get("name"), 'TestDep')
             response = client.post('/api/department', data=json.dumps(dict(name='TestDep')),
                                    content_type='application/json')
-            self.assertTrue(str(json.loads(response.data)).find('Department with this name already exists'))
+            self.assertEqual(response.status_code, 400)
+            #self.assertTrue(str(json.loads(response.data)).find("Department with this name already exists'"))
             response = client.post('/api/department', data=json.dumps(dict(name='01')),
                                    content_type='application/json')
             self.assertTrue(str(json.loads(response.data)).find("Shorter than minimum length 3"))
@@ -56,7 +57,7 @@ class TestDepartmentAPI(Conftest):
             response = client.put('/api/department')
             self.assertEqual(response.status_code, 400)
 
-            response = client.put('/api/department/blabla', data=json.dumps(dict(name='TestDep')),
+            response = client.put('/api/department/wrongudid', data=json.dumps(dict(name='TestDep')),
                                   content_type='application/json')
             self.assertEqual(response.status_code, 404)
 
@@ -71,7 +72,7 @@ class TestDepartmentAPI(Conftest):
 
             response = client.put('/api/department/' + dept.uuid, data=json.dumps(dict(name='NewName')),
                                   content_type='application/json')
-            self.assertTrue(str(json.loads(response.data)).find('Department with this name already exists'))
+            self.assertEqual(response.status_code, 400)
 
     def test_delete(self):
         client = app.test_client()
@@ -79,11 +80,9 @@ class TestDepartmentAPI(Conftest):
             response = client.delete('/api/department')
             self.assertEqual(response.status_code, 400)
 
-            response = client.delete('/api/department/blabla', data=json.dumps(dict(name='TestDep')),
-                                     content_type='application/json')
+            response = client.delete('/api/department/blabla')
             self.assertEqual(response.status_code, 404)
 
             dept = Department.get_all()[0]
-            response = client.delete('/api/department/' + dept.uuid, data=json.dumps(dict(name='NewName')),
-                                     content_type='application/json')
+            response = client.delete('/api/department/' + dept.uuid)
             self.assertEqual(204, response.status_code)

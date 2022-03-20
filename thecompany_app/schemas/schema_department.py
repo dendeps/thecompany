@@ -5,8 +5,6 @@ from thecompany_app.models.department import Department
 def validate_department(dept_name):
     if dept_name is None or len(dept_name) < 3:
         raise ValidationError("Department name should be at least 3 letters")
-    elif Department.find_by_name(dept_name):
-        raise ValidationError("Department with this name already exists")
 
 class Department_schema(Schema):
     uuid = fields.Str()

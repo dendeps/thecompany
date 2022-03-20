@@ -23,10 +23,11 @@ class TestDepartmentModel(Conftest):
         """
         Tests checking if dept already exists
         """
-        dept = Department("TestDepartmentName")
-        self.assertFalse(dept.check_if_exists())
+        name = "TestDepartmentName"
+        dept = Department(name)
+        self.assertFalse(Department.check_if_exists(name))
         dept.save_to_db()
-        self.assertTrue(dept.check_if_exists())
+        self.assertTrue(dept.check_if_exists(name))
 
     def test_find_by_name(self):
         """

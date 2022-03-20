@@ -28,8 +28,11 @@ class Employee_api(Employee_api_base):
 
     NOT_FOUND_MSG = "No employee found with provided UUID"
     SUCCESS_MSG = "Operation successful"
+    UUID_REQUIRED = "UUID is required"
 
-    def get(self, uuid:str):
+    def get(self, uuid=None):
+        if uuid is None:
+            return self.UUID_REQUIRED, 400
         try:
             employee = Employee.get_by_uuid(uuid)
         except ValueError:
@@ -47,7 +50,9 @@ class Employee_api(Employee_api_base):
             employee.save_to_db()
         return self.schema.dump(employee), 201
 
-    def put(self, uuid):
+    def put(self, uuid=None):
+        if uuid is None:
+            return self.UUID_REQUIRED, 400
         try:
             employee = Employee.get_by_uuid(uuid)
         except ValueError:
@@ -65,7 +70,9 @@ class Employee_api(Employee_api_base):
             employee.save_to_db()
             return self.schema.dump(employee), 200
 
-    def delete(self, uuid):
+    def delete(self, uuid=None):
+        if uuid is None:
+            return self.UUID_REQUIRED, 400
         try:
             employee = Employee.get_by_uuid(uuid)
         except ValueError:

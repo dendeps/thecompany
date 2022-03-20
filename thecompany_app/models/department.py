@@ -34,8 +34,9 @@ class Department(db.Model):
     def __repr__(self):
         return f"Department: {self.name}"
 
-    def check_if_exists(self):
-        department = db.session.query(Department).filter_by(name=self.name).first()
+    @classmethod
+    def check_if_exists(cls, name: str):
+        department = db.session.query(Department).filter_by(name=name).first()
         if department is None:
             return False
         else:
