@@ -2,19 +2,18 @@ import http
 import json
 
 from thecompany_app import app
-from thecompany_app.models.department import Department
 from thecompany_app.models.employee import Employee
 from thecompany_app.tests.conftest import Conftest
 
 
 class TestEmployeeAPI(Conftest):
     """
-    Department API test cases
+    Employee API test cases
     """
 
     def test_get_all(self):
         """
-        Testing the get request to /api/departments.
+        Testing the get request to /api/employee.
         It should return the status code 200
         """
         client = app.test_client()
@@ -30,10 +29,11 @@ class TestEmployeeAPI(Conftest):
         response = client.get('/api/employee/' + empl.uuid)
         assert response.status_code == http.HTTPStatus.OK
         self.assertEqual(response.json.get("uuid"), empl.uuid)
-        self.assertEqual(response.json.get("name"), empl.name)
 
-        response = client.get('/api/department/wronguuid')
+        response = client.get('/api/employee/wronguuid')
         self.assertEqual(response.status_code, 404)
+        response = client.get('/api/employee')
+        self.assertEqual(response.status_code, 400)
 
     def test_post(self):
         client = app.test_client()
@@ -70,6 +70,13 @@ class TestEmployeeAPI(Conftest):
                                                                          department="Management")),
                                    content_type='application/json')
             self.assertEqual(response.status_code, 200)
+            response = client.put('/api/employee/' + empl.uuid, data=json.dumps(dict(name="Tanya",
+                                                                                     position="Jobless",
+                                                                                     dob="01-02-2003",
+                                                                                     salary=10000,
+                                                                                     department="no")),
+                                  content_type='application/json')
+            self.assertEqual(response.status_code, 400)
 
     def test_delete(self):
         client = app.test_client()

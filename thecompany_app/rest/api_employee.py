@@ -44,8 +44,8 @@ class Employee_api(Employee_api_base):
             employee = self.schema.load(request.json)
         except ValidationError as error:
             return error.messages, 400
-        except ValueError as error:
-            return error.message, 400
+        #except ValueError as error:
+        #    return error.message, 400
         else:
             employee.save_to_db()
         return self.schema.dump(employee), 201
