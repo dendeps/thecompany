@@ -27,7 +27,7 @@ class TestDepartmentModel(Conftest):
         dept = Department(name)
         self.assertFalse(Department.check_if_exists(name))
         dept.save_to_db()
-        self.assertTrue(dept.check_if_exists(name))
+        self.assertTrue(Department.check_if_exists(name))
 
     def test_find_by_name(self):
         """

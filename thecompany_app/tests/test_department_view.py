@@ -27,5 +27,33 @@ class TestDepartmentView(Conftest):
 
         response1 = client.get('/')
         self.assertEqual(200, response1.status_code)
+
         response2 = client.post('/')
         self.assertEqual(405, response2.status_code)
+
+        response2 = client.post('/department', data={'department': 'Webdepartment'}
+                                )
+        self.assertEqual(302, response2.status_code)
+        self.assertTrue(Department.check_if_exists('Webdepartment'))
+
+    def test_department_update_page(self):
+        """
+        Testing /departments/update/<uuid>/update page
+        """
+        client = app.test_client()
+        uuid = Department.get_all()[0].uuid
+        resp = client.post('/departments/update/'+uuid, data={'department': 'ShitDepartment'}
+                                )
+        assert resp.status_code == http.HTTPStatus.FOUND
+        self.assertTrue(Department.check_if_exists('ShitDepartment'))
+
+    def test_department_delete_page(self):
+        """
+        Testing /departments/delete/<:uuid> page
+        """
+        client = app.test_client()
+        uuid = Department.get_all()[0].uuid
+        resp = client.post('/departments/delete/' + uuid)
+        assert resp.status_code == http.HTTPStatus.FOUND
+        with self.assertRaises(ValueError):
+            Department.get_by_uuid(uuid)

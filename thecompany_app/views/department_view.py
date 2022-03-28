@@ -1,3 +1,4 @@
+import requests
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, json
 )
@@ -9,6 +10,7 @@ from thecompany_app.schemas.schema_department import Department_schema
 
 bp = Blueprint('departments', __name__)
 schema = Department_schema()
+HOST = 'http://127.0.0.1:5000/'
 
 
 @bp.route('/', methods=('GET',))
@@ -31,7 +33,6 @@ def create():
             department.save_to_db()
             return redirect(url_for('departments.index'))
         flash(error)
-
     return render_template('departments/create.html')
 
 
@@ -39,11 +40,11 @@ def create():
 def update(uuid):
     department = Department.get_by_uuid(uuid)
     if request.method == 'POST':
-        dept_name = request.form['department']
-        error = schema.validate(dept_name)
+        dept_name = request.form.get('department')
+        error = schema.validate({'name': dept_name })
         if not dept_name:
             error = 'Department is required.'
-        if error is None:
+        if not error:
             department.name = dept_name
             department.save_to_db()
             return redirect(url_for('departments.index'))
