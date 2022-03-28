@@ -1,5 +1,3 @@
-import bdb
-
 from thecompany_app.models.department import Department
 from thecompany_app.models.employee import Employee
 from thecompany_app.tests.conftest import Conftest
