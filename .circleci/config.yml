@@ -38,7 +38,7 @@ jobs:
           # This assumes pytest is installed via the install-package step above
           command: |
             export PYTHONPATH=$PWD
-            export COVERALLS_REPO_TOKEN="n83cQ9h6vTuud5UrjwMRJY09f2B89LydI"
+            export COVERALLS_REPO_TOKEN="hB7reAtAD93xyu5PonHdzrKo3yNZO41yP"
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
