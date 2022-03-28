@@ -43,7 +43,7 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
             pytest ~/project/thecompany_app/tests
-            coverage run
+            coverage run --source='.' -m unittest
             coveralls
 
 # Invoke jobs via workflows
