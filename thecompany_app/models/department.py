@@ -43,7 +43,7 @@ class Department(db.Model):
             return True
 
     @classmethod
-    def find_by_name(self, name: str):
+    def find_by_name(cls, name: str):
         department = db.session.query(Department).filter_by(name=name).first()
         return department
 

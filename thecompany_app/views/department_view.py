@@ -23,8 +23,6 @@ def create():
     if request.method == 'POST':
         name = request.form['department']
         error = None
-        if not name:
-            error = 'Department is required.'
         try:
             department = schema.load({'name': name})
         except ValidationError as err:

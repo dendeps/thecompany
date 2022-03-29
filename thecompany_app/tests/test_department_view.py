@@ -20,20 +20,20 @@ class TestDepartmentView(Conftest):
         Testing /department page
         """
         client = app.test_client()
-        response1 = client.get('/departments')
-        self.assertEqual(200, response1.status_code)
-        response2 = client.post('/departments')
-        self.assertEqual(405, response2.status_code)
+        resp = client.get('/departments')
+        self.assertEqual(200, resp.status_code)
+        resp = client.post('/departments')
+        self.assertEqual(405, resp.status_code)
 
-        response1 = client.get('/')
-        self.assertEqual(200, response1.status_code)
+        resp = client.get('/')
+        self.assertEqual(200, resp.status_code)
 
-        response2 = client.post('/')
-        self.assertEqual(405, response2.status_code)
+        resp = client.post('/')
+        self.assertEqual(405, resp.status_code)
 
-        response2 = client.post('/department', data={'department': 'Webdepartment'}
+        resp = client.post('/department', data={'department': 'Webdepartment'}
                                 )
-        self.assertEqual(302, response2.status_code)
+        self.assertEqual(302, resp.status_code)
         self.assertTrue(Department.check_if_exists('Webdepartment'))
 
     def test_department_update_page(self):

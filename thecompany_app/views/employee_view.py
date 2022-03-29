@@ -66,6 +66,7 @@ def create():
                 employee = schema.load(data)
             except ValidationError as err:
                 flash(err)
+                return redirect(url_for('employees.index')), 400
             else:
                 employee.save_to_db()
             return redirect(url_for('employees.index'))

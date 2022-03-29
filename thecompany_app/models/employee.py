@@ -68,9 +68,14 @@ class Employee(db.Model):
         return employee
 
     @classmethod
-    def delete_by_uuid(cls, uuid):
+    def delete_by_uuid(cls, uuid: str):
         employee = db.session.query(Employee).filter_by(uuid=uuid).first()
         if employee is None:
             raise ValueError('Invalid employee uuid')
         db.session.delete(employee)
         db.session.commit()
+
+    @classmethod
+    def find_by_name(cls, name: str):
+        employee = db.session.query(Employee).filter_by(name=name).first()
+        return employee
