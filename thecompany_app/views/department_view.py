@@ -21,12 +21,14 @@ def index():
 @bp.route('/department', methods=('GET', 'POST'))
 def create():
     if request.method == 'POST':
-        name = request.form['department']
+        dept_name = request.form['department']
         error = None
         try:
-            department = schema.load({'name': name})
+            department = schema.load({'name': dept_name})
         except ValidationError as err:
             error = err.messages
+        if Department.check_if_exists(dept_name):
+            error = 'Department with this name already exists.'
         if error is None:
             department.save_to_db()
             return redirect(url_for('departments.index'))
@@ -40,6 +42,8 @@ def update(uuid):
     if request.method == 'POST':
         dept_name = request.form.get('department')
         error = schema.validate({'name': dept_name })
+        if Department.check_if_exists(dept_name):
+            error = 'Department with this name already exists.'
         if not dept_name:
             error = 'Department is required.'
         if not error:
