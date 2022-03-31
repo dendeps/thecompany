@@ -1,9 +1,7 @@
-import requests
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, json
+    Blueprint, flash, redirect, render_template, request, url_for
 )
 from marshmallow import ValidationError
-from werkzeug.exceptions import abort
 
 from thecompany_app.models.department import Department
 from thecompany_app.schemas.schema_department import Department_schema
@@ -18,20 +16,22 @@ HOST = 'http://127.0.0.1:5000/'
 def index():
     return render_template('departments/index.html', departments=Department.get_all())
 
+
 @bp.route('/department', methods=('GET', 'POST'))
 def create():
     if request.method == 'POST':
         dept_name = request.form['department']
         error = None
+        if Department.check_if_exists(dept_name):
+            error = 'Department with this name already exists.'
         try:
             department = schema.load({'name': dept_name})
         except ValidationError as err:
             error = err.messages
-        if Department.check_if_exists(dept_name):
-            error = 'Department with this name already exists.'
-        if error is None:
-            department.save_to_db()
-            return redirect(url_for('departments.index'))
+        else:
+            if error is None:
+                department.save_to_db()
+                return redirect(url_for('departments.index'))
         flash(error)
     return render_template('departments/create.html')
 
@@ -41,7 +41,7 @@ def update(uuid):
     department = Department.get_by_uuid(uuid)
     if request.method == 'POST':
         dept_name = request.form.get('department')
-        error = schema.validate({'name': dept_name })
+        error = schema.validate({'name': dept_name})
         if Department.check_if_exists(dept_name):
             error = 'Department with this name already exists.'
         if not dept_name:
@@ -53,6 +53,7 @@ def update(uuid):
         flash(error)
     return render_template('departments/update.html', department=department)
 
+
 @bp.route('/departments/delete/<uuid>', methods=('POST',))
 def delete(uuid):
     error = None
@@ -60,8 +61,8 @@ def delete(uuid):
         department = Department.get_by_uuid(uuid)
     except ValueError:
         error = "No department found with provided UUID"
-    if error is None:
-        department.delete_from_db()
-        return redirect(url_for('departments.index'))
+    else:
+        if error is None:
+            department.delete_from_db()
+            return redirect(url_for('departments.index'))
     flash(error)
-

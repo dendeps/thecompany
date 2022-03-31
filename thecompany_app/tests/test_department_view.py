@@ -1,5 +1,4 @@
 import http
-import json
 
 from thecompany_app import app
 from thecompany_app.models.department import Department
@@ -31,10 +30,9 @@ class TestDepartmentView(Conftest):
         resp = client.post('/')
         self.assertEqual(405, resp.status_code)
 
-        resp = client.post('/department', data={'department': 'Webdepartment'}
-                                )
+        resp = client.post('/department', data={'department': 'WebDepartment'})
         self.assertEqual(302, resp.status_code)
-        self.assertTrue(Department.check_if_exists('Webdepartment'))
+        self.assertTrue(Department.check_if_exists('WebDepartment'))
 
     def test_department_update_page(self):
         """
@@ -42,8 +40,7 @@ class TestDepartmentView(Conftest):
         """
         client = app.test_client()
         uuid = Department.get_all()[0].uuid
-        resp = client.post('/departments/update/'+uuid, data={'department': 'ShitDepartment'}
-                                )
+        resp = client.post('/departments/update/'+uuid, data={'department': 'ShitDepartment'})
         assert resp.status_code == http.HTTPStatus.FOUND
         self.assertTrue(Department.check_if_exists('ShitDepartment'))
 

@@ -27,20 +27,12 @@ class Employee_schema(Schema):
     salary = fields.Int(required=True)
     dob = fields.Str(validate=validate.Length(min=8))
     department = fields.Pluck(Department_schema, 'name')
-    #department = fields.Nested(Department_schema(only=("name",)))
+    # department = fields.Nested(Department_schema(only=("name",)))
     uuid = fields.Str()
 
     class Meta(Schema.Meta):
         model = Employee
-        #dump_only = 'department'
-
-
-    def get_dept_id(self, data, **kwargs):
-        dept = data.get("department")
-        if Department.find_by_name(dept.name):
-            dept = Department.find_by_name(dept.name)
-        data["department"] = dept.id
-        return data
+        # dump_only = 'department'
 
     @post_load
     def create_employee(self, data, **kwargs):

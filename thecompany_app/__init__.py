@@ -19,12 +19,14 @@ api = Api(app)
 
 # database
 db = SQLAlchemy(app)
-migrate = Migrate(app, db, directory = MIGRATIONS_DIR)
+migrate = Migrate(app, db, directory=MIGRATIONS_DIR)
 
 from thecompany_app.rest import init_api
+
 init_api()
 
 from thecompany_app.views import init_views
+
 init_views()
 
 from thecompany_app.models import department, employee

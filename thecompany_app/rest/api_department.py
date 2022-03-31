@@ -30,7 +30,7 @@ class Department_api(Department_api_base):
     ALREADY_EXISTS_MSG = "Department with this name already exists"
     UUID_REQUIRED = "UUID is required"
 
-    def get(self, uuid:str):
+    def get(self, uuid: str):
         try:
             department = Department.get_by_uuid(uuid)
         except ValueError:
