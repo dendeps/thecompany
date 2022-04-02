@@ -4,33 +4,44 @@ REST API module for Employees
 from flask import request
 from flask_restful import Resource
 from marshmallow import ValidationError
-
-from thecompany_app.models.department import Department
 from thecompany_app.models.employee import Employee
-from thecompany_app.schemas.schema_employee import Employee_schema
+from thecompany_app.schemas.schema_employee import EmployeeSchema
 
 
-class Employee_api_base(Resource):
+class EmployeeApiBase(Resource):
     """
     Employee API base class
     """
     # Marshmallow Employee schema
-    schema = Employee_schema()
+    schema = EmployeeSchema()
 
 
-class Employee_list_api(Employee_api_base):
+class EmployeeListApi(EmployeeApiBase):
+    """
+    Class for EmployeesListApi Resource available at '/api/employees' url
+    """
     def get(self):
+        """
+        Called when GET request is sent
+        :returns: list of all Employees
+        """
         employees = Employee.get_all()
         return self.schema.dump(employees, many=True), 200
 
 
-class Employee_api(Employee_api_base):
-
+class EmployeeApi(EmployeeApiBase):
+    """
+    Class for EmployeeApi Resource available at '/api/employee' url
+    """
     NOT_FOUND_MSG = "No employee found with provided UUID"
     SUCCESS_MSG = "Operation successful"
     UUID_REQUIRED = "UUID is required"
 
     def get(self, uuid=None):
+        """
+        Called when GET request is sent
+        :returns: Employee with given UUID
+        """
         if uuid is None:
             return self.UUID_REQUIRED, 400
         try:
@@ -40,6 +51,11 @@ class Employee_api(Employee_api_base):
         return self.schema.dump(employee), 200
 
     def post(self):
+        """
+        Called when POST request is sent
+        Creates a new Employee with data provided
+        :returns: created Employee
+        """
         try:
             employee = self.schema.load(request.json)
         except ValidationError as error:
@@ -51,6 +67,11 @@ class Employee_api(Employee_api_base):
         return self.schema.dump(employee), 201
 
     def put(self, uuid=None):
+        """
+        Called when PUT request is sent
+        Updates an Employee with data provided with the given UUID
+        :returns: updated Employee
+        """
         if uuid is None:
             return self.UUID_REQUIRED, 400
         try:
@@ -71,6 +92,10 @@ class Employee_api(Employee_api_base):
             return self.schema.dump(employee), 200
 
     def delete(self, uuid=None):
+        """
+        Called when DEL request is sent
+        Deletes an Employee with given UUID
+        """
         if uuid is None:
             return self.UUID_REQUIRED, 400
         try:

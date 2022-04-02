@@ -1,5 +1,7 @@
+"""
+Initializes the WEB application and web service.
+"""
 import os
-
 from flask import Flask, Blueprint
 from flask_migrate import Migrate
 from flask_restful import Api

@@ -10,6 +10,10 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
+    """
+    Default app configuration
+
+    """
     DEBUG = True
     TESTING = False
     SECRET_KEY = os.urandom(32)
@@ -21,6 +25,10 @@ class Config(object):
 
 
 class TestingConfig(object):
+    """
+    Testing app configuration
+
+    """
     TESTING = True
     CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'thecompany_app', 'tests', 'test.db')

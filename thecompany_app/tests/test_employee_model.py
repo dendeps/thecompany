@@ -4,7 +4,7 @@ from thecompany_app.models.department import Department
 from thecompany_app.models.employee import Employee
 from thecompany_app.tests.conftest import Conftest
 from marshmallow import ValidationError
-from thecompany_app.schemas.schema_employee import Employee_schema
+from thecompany_app.schemas.schema_employee import EmployeeSchema
 
 
 class TestEmployeeModel(Conftest):

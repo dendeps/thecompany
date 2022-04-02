@@ -3,6 +3,9 @@ from thecompany_app import db
 
 
 class Employee(db.Model):
+    """
+    Data model and methods which represents Employee
+    """
     __tablename__ = 'employee'
 
     # id of the employee in the table
@@ -48,20 +51,32 @@ class Employee(db.Model):
         return f'Employee: {self.name}, {self.dob}, {self.position}, {self.salary}'
 
     def save_to_db(self):
+        """
+        Saves updates of the current Employee to the DB
+        """
         db.session.add(self)
         db.session.commit()
         return self
 
     def delete_from_db(self):
+        """
+        Deletes the current Employee from the DB
+        """
         db.session.delete(self)
         db.session.commit()
 
     @classmethod
     def get_all(cls):
+        """
+        Returns a list of all Employees from the DB
+        """
         return db.session.query(Employee).all()
 
     @classmethod
     def get_by_uuid(cls, uuid):
+        """
+        Returns the Employee with given uuid or raises ValueError
+        """
         employee = db.session.query(Employee).filter_by(uuid=uuid).first()
         if employee is None:
             raise ValueError('Invalid employee uuid')
@@ -69,6 +84,9 @@ class Employee(db.Model):
 
     @classmethod
     def delete_by_uuid(cls, uuid: str):
+        """
+        Deletes the Employee with given uuid or raises ValueError
+        """
         employee = db.session.query(Employee).filter_by(uuid=uuid).first()
         if employee is None:
             raise ValueError('Invalid employee uuid')
@@ -77,5 +95,8 @@ class Employee(db.Model):
 
     @classmethod
     def find_by_name(cls, name: str):
+        """
+        Returns the Employee with given name or None
+        """
         employee = db.session.query(Employee).filter_by(name=name).first()
         return employee

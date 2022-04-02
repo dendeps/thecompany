@@ -1,24 +1,33 @@
+"""
+Defines application web view for managing Departments.
+"""
 from flask import (
     Blueprint, flash, redirect, render_template, request, url_for
 )
 from marshmallow import ValidationError
 
 from thecompany_app.models.department import Department
-from thecompany_app.schemas.schema_department import Department_schema
+from thecompany_app.schemas.schema_department import DepartmentSchema
 
 bp = Blueprint('departments', __name__)
-schema = Department_schema()
+schema = DepartmentSchema()
 HOST = 'http://127.0.0.1:5000/'
 
 
 @bp.route('/', methods=('GET',))
 @bp.route('/departments', methods=('GET',))
 def index():
+    """
+    Renders Departments List page
+    """
     return render_template('departments/index.html', departments=Department.get_all())
 
 
 @bp.route('/department', methods=('GET', 'POST'))
 def create():
+    """
+    Renders Create Department page
+    """
     if request.method == 'POST':
         dept_name = request.form['department']
         error = None
@@ -38,6 +47,9 @@ def create():
 
 @bp.route('/departments/update/<uuid>', methods=('GET', 'POST'))
 def update(uuid):
+    """
+    Renders Update Department page
+    """
     department = Department.get_by_uuid(uuid)
     if request.method == 'POST':
         dept_name = request.form.get('department')
@@ -56,13 +68,16 @@ def update(uuid):
 
 @bp.route('/departments/delete/<uuid>', methods=('POST',))
 def delete(uuid):
+    """
+    Renders Delete Department page
+    """
     error = None
     try:
         department = Department.get_by_uuid(uuid)
     except ValueError:
         error = "No department found with provided UUID"
+        flash(error)
     else:
         if error is None:
             department.delete_from_db()
             return redirect(url_for('departments.index'))
-    flash(error)

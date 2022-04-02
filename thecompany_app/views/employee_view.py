@@ -1,6 +1,8 @@
-import requests as requests
+"""
+Defines application web view for managing Employees.
+"""
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, make_response
+    Blueprint, flash, redirect, render_template, request, url_for, make_response
 )
 from flask_wtf import FlaskForm
 from wtforms import StringField, DecimalField, SelectField, SubmitField
@@ -8,11 +10,14 @@ from wtforms.validators import InputRequired, Length, ValidationError
 
 from thecompany_app.models.department import Department
 from thecompany_app.models.employee import Employee
-from thecompany_app.schemas.schema_employee import Employee_schema
+from thecompany_app.schemas.schema_employee import EmployeeSchema
 
 HOST = 'http://127.0.0.1:5000/'
 
 class EmployeeForm(FlaskForm):
+    """
+    Defines WTF web form for entering the Employee data
+    """
     name = StringField('Full name', validators=[InputRequired(), Length(5, 128), ])
     department = SelectField(choices=[''])
     position = StringField('Position', validators=[InputRequired(), Length(3, 128), ])
@@ -24,18 +29,20 @@ class EmployeeForm(FlaskForm):
     def get_departments_list(cls):
         """
         Gets the list of departments from database for the form
-
         """
         departments = Department.get_all()
         cls.department = SelectField(choices=[department.name for department in departments])
 
 
 bp = Blueprint('employees', __name__)
-schema = Employee_schema()
+schema = EmployeeSchema()
 
 
 @bp.route('/employees')
 def index():
+    """
+    Renders the Employees list page
+    """
     return render_template('employees/index.html', employees=Employee.get_all())
     #url = f'{HOST}api/employees'
     #employees = requests.get(url).json()
@@ -44,6 +51,9 @@ def index():
 
 @bp.route('/employee', methods=('GET', 'POST'))
 def create():
+    """
+    Renders Create Employee page
+    """
     EmployeeForm.get_departments_list()
     form = EmployeeForm()
 
@@ -75,6 +85,9 @@ def create():
 
 @bp.route('/employees/update/<uuid>', methods=('GET', 'POST'))
 def update(uuid):
+    """
+    Renders Update Employee page
+    """
     employee = Employee.get_by_uuid(uuid)
     EmployeeForm.get_departments_list()
     form = EmployeeForm(obj=employee)
@@ -111,6 +124,9 @@ def update(uuid):
 
 @bp.route('/employees/delete/<uuid>', methods=('POST',))
 def delete(uuid):
+    """
+    Renders Delete Employee page
+    """
     employee = Employee.get_by_uuid(uuid)
     employee.delete_from_db()
     return redirect(url_for('employees.index'))
