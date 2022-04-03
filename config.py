@@ -1,4 +1,5 @@
 import os
+import psycopg2
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -22,6 +23,14 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # "postgresql://postgres:kidagibu@localhost:5432/trypg"
+    #SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/dbname[?key=value&key=value...]
+
+
+
+    DATABASE_URL = os.environ['DATABASE_URL']
+    SQLALCHEMY_DATABASE_URI = DATABASE_URL
+
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 
 class TestingConfig(object):
