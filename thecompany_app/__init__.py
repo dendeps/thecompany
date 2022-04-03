@@ -36,9 +36,9 @@ init_views()
 
 from thecompany_app.models import department, employee
 
-engine = db.engine
-if not (sqlalchemy.inspect(engine).has_table("department") or
-        sqlalchemy.inspect(engine).has_table("employee")):
+# Creating the tables and populating the DB
+if not (sqlalchemy.inspect(db.engine).has_table("department") or
+        sqlalchemy.inspect(db.engine).has_table("employee")):
     from thecompany_app.models.populate import Populate
     Populate.populate()
 
