@@ -10,7 +10,7 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 
 from config import Config
-from thecompany_app.models.populate import Populate
+
 
 MIGRATIONS_DIR = os.path.join('thecompany_app', 'migrations')
 TEMPLATES_DIR = 'templates'
@@ -39,6 +39,7 @@ from thecompany_app.models import department, employee
 engine = db.engine
 if not (sqlalchemy.inspect(engine).has_table("department") or
         sqlalchemy.inspect(engine).has_table("employee")):
+    from thecompany_app.models.populate import Populate
     Populate.populate()
 
 
