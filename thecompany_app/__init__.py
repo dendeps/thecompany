@@ -2,12 +2,15 @@
 Initializes the WEB application and web service.
 """
 import os
+
+import sqlalchemy
 from flask import Flask, Blueprint
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 
 from config import Config
+from thecompany_app.models.populate import Populate
 
 MIGRATIONS_DIR = os.path.join('thecompany_app', 'migrations')
 TEMPLATES_DIR = 'templates'
@@ -32,3 +35,10 @@ from thecompany_app.views import init_views
 init_views()
 
 from thecompany_app.models import department, employee
+
+engine = db.engine
+if not (sqlalchemy.inspect(engine).has_table("department") or
+        sqlalchemy.inspect(engine).has_table("employee")):
+    Populate.populate()
+
+
