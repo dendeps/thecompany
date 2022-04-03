@@ -27,10 +27,10 @@ class Config(object):
 
 
 
-    DATABASE_URL = os.environ['DATABASE_URL']
+    DATABASE_URL = os.environ.get('DATABASE_URL').replace("postgres://", "postgresql://", 1)
     SQLALCHEMY_DATABASE_URI = DATABASE_URL
 
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 
 class TestingConfig(object):
