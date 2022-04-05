@@ -18,7 +18,8 @@ TEMPLATES_DIR = 'templates'
 
 # Flask
 app = Flask(__name__, template_folder=TEMPLATES_DIR)
-app.config.from_object(Config)
+config_name = os.getenv('FLASK_CONFIG') or 'default'
+app.config.from_object(Config[config_name])
 
 # Flask RESTful
 api = Api(app)

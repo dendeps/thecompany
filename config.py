@@ -5,7 +5,7 @@ load_dotenv()
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-class Config(object):
+class DevelopmentConfig(object):
     """
     Default app configuration
 
@@ -15,7 +15,7 @@ class Config(object):
     SECRET_KEY = os.urandom(32)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    #SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/dbname[?key=value&key=value...]
+    # SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/dbname[?key=value&key=value...]
     envIsHeroku = os.environ.get('ENV_IS_HEROKU')
     if envIsHeroku == '1':
         DATABASE_URL = os.environ.get('DATABASE_URL').replace("postgres://", "postgresql://", 1)
@@ -28,7 +28,7 @@ class Config(object):
         SQLALCHEMY_DATABASE_URI = f'postgresql://{user}:{password}' \
                                   f'@{server}/{database}'
 
-    #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    # conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 
 class TestingConfig(object):
@@ -40,3 +40,10 @@ class TestingConfig(object):
     CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'thecompany_app', 'tests', 'test.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
+config = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'default': DevelopmentConfig
+}
