@@ -11,7 +11,6 @@ class Conftest(unittest.TestCase):
     """
     Base test case class
     """
-
     def setUp(self):
         """
         Execute before every test case
