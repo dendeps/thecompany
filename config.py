@@ -34,7 +34,9 @@ class HerokuConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/dbname[?key=value&key=value...]
-    DATABASE_URL = os.environ.get('DATABASE_URL').replace("postgres://", "postgresql://", 1)
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    if DATABASE_URL:
+        DATABASE_URL = os.environ.get('DATABASE_URL').replace("postgres://", "postgresql://", 1)
     SQLALCHEMY_DATABASE_URI = DATABASE_URL
 
     # conn = psycopg2.connect(DATABASE_URL, sslmode='require')
