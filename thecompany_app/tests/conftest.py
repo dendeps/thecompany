@@ -2,7 +2,7 @@
 This module defines the BaseTestCase class
 """
 import unittest
-from config import config
+from config import config, TestingConfig
 from thecompany_app import app, db
 from thecompany_app.models.populate import Populate
 
@@ -23,8 +23,7 @@ class Conftest(unittest.TestCase):
         #db.create_all()
 
         self.app = app
-        self.app.config.from_object(config["testing"])
-        db.create_all()
+        self.app.config.from_object(TestingConfig)
         Populate.populate()
 
     def tearDown(self):
