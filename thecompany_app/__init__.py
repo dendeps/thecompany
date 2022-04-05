@@ -5,20 +5,19 @@ import os
 
 import sqlalchemy
 from coverage.env import TESTING
-from flask import Flask, Blueprint
+from flask import Flask
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
-
-from config import Config
-
+from config import config
 
 MIGRATIONS_DIR = os.path.join('thecompany_app', 'migrations')
 TEMPLATES_DIR = 'templates'
 
 # Flask
 app = Flask(__name__, template_folder=TEMPLATES_DIR)
-app.config.from_object(Config)
+config_name = os.getenv('FLASK_CONFIG') or 'default'
+app.config.from_object(config[config_name])
 
 # Flask RESTful
 api = Api(app)
