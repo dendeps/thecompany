@@ -5,11 +5,10 @@ import os
 
 import sqlalchemy
 from coverage.env import TESTING
-from flask import Flask, Blueprint
+from flask import Flask
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
-
 from config import config
 
 MIGRATIONS_DIR = os.path.join('thecompany_app', 'migrations')
