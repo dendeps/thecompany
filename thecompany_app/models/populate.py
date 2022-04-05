@@ -1,7 +1,6 @@
 """
 Populates database with departments and employees.
 """
-from datetime import date
 from thecompany_app import db
 from .department import Department
 from .employee import Employee

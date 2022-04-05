@@ -11,6 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from config import Config
 
+
 MIGRATIONS_DIR = os.path.join('thecompany_app', 'migrations')
 TEMPLATES_DIR = 'templates'
 
