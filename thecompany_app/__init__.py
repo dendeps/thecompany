@@ -41,5 +41,3 @@ if not (sqlalchemy.inspect(db.engine).has_table("department") or
         sqlalchemy.inspect(db.engine).has_table("employee")):
     from thecompany_app.models.populate import Populate
     Populate.populate()
-
-
