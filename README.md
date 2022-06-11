@@ -13,7 +13,7 @@
 
 - ### Flask Web framework
 - ### Flask Restful REST API framework 
-- ### Postgres database
+- ### PostgreSQL database
 
 ## How to build this project:
 
