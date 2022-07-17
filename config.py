@@ -28,7 +28,7 @@ class HerokuConfig(object):
     """
     Heroku app configuration
     """
-    DEBUG = True
+    DEBUG = False
     TESTING = False
     SECRET_KEY = os.urandom(32)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
